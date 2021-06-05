@@ -3,6 +3,7 @@ package com.example.segment
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import com.example.segment.databinding.ActivityLoginBinding
 
@@ -14,6 +15,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var actionBar : ActionBar?
+        actionBar = supportActionBar
+        actionBar?.hide()
 
         init()
 

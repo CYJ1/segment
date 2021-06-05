@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import com.example.segment.databinding.ActivityRegBinding
 
 class RegActivity : AppCompatActivity() {
@@ -14,6 +15,10 @@ class RegActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var actionBar : ActionBar?
+        actionBar = supportActionBar
+        actionBar?.hide()
 
         init()
 
