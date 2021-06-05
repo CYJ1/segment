@@ -25,6 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:fontFamily="@font/regularnexon"
                 android:text="상대이름"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="18dp" />
@@ -38,6 +39,7 @@
                 android:background="@drawable/layout_round"
                 android:gravity="center_vertical"
                 android:padding="5dp"
+                android:fontFamily="@font/regularnexon"
                 android:text="상대가 입력한 내용"
                 android:textSize="20dp" />
 
@@ -47,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:gravity="center_vertical"
+                android:fontFamily="@font/regularnexon"
                 android:text="시간" />
         </LinearLayout>
     </LinearLayout>
