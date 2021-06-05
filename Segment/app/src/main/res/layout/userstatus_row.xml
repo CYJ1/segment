@@ -22,7 +22,8 @@
             android:layout_weight="9"
             android:fontFamily="@font/regularnexon"
             android:padding="20dp"
-            android:text="User_name" />
+            android:text="User_name"
+            android:textSize="18sp" />
 
         <ImageView
             android:id="@+id/isOnline"
