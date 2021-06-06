@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".MainchatlistActivity">
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="작은채팅방으로이동"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <ListView
         android:layout_width="0dp"
         android:layout_height="0dp"

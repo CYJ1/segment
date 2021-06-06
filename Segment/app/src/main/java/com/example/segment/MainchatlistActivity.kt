@@ -27,4 +27,9 @@ class MainchatlistActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+        finish()
+    }
+
 }

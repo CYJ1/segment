@@ -14,4 +14,7 @@ class UserActivity : AppCompatActivity() {
         actionBar = supportActionBar
         actionBar?.hide()
     }
+    override fun onBackPressed() {
+        finish()
+    }
 }

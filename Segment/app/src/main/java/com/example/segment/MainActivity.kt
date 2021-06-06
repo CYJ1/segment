@@ -42,8 +42,7 @@ class MainActivity : AppCompatActivity() {
             }
             btLogout.setOnClickListener {
                 //로그아웃
-                intent = Intent(this@MainActivity, LoginActivity::class.java)
-                startActivity(intent)
+                finish()
             }
         }
     }

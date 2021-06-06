@@ -39,8 +39,7 @@ class RegActivity : AppCompatActivity() {
 
                 Toast.makeText(this@RegActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
                 //로그인 화면으로 전환
-                val intent = Intent(this@RegActivity, LoginActivity::class.java)
-                startActivity(intent)
+                finish()
 
 //                Toast.makeText(this@RegActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()
 
@@ -51,6 +50,9 @@ class RegActivity : AppCompatActivity() {
         }
 
 
+    }
+    override fun onBackPressed() {
+        finish()
     }
 
 }
