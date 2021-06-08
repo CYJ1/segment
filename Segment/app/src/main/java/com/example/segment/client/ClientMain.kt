@@ -27,14 +27,16 @@ class ClientMain(){
         }
     }
 
-    fun main(){
+    fun main() : Socket{
         val port = 3000
         val socketAddress = InetAddress.getByName("172.30.1.37")
         val socket = Socket(socketAddress, port)
 
-        var clientChat = ClientChatting(1,1,11,socket)
+        //var clientChat = ClientChatting(1,1,11,socket)
         //clientChat.createSmallRoom(1,1,"NOTICE")
         //clientChat.enterSmallRoom(1,13)
-        clientChat.destroySmallRoom(1,11)
+        //clientChat.destroySmallRoom(1,11)
+
+        return socket
     }
 }
