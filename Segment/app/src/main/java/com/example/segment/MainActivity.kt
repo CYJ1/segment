@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             }
             btLogout.setOnClickListener {
                 //로그아웃
-                Client.logout()
+                //user status 변경
                 finish()
             }
         }
