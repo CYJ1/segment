@@ -52,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
+                        cleartext()
                     }else{
                         Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                     }
@@ -63,6 +64,7 @@ class LoginActivity : AppCompatActivity() {
                 //회원가입 화면으로
                 val intent = Intent(this@LoginActivity, RegActivity::class.java)
                 startActivity(intent)
+                cleartext()
 
             }
 
@@ -78,10 +80,17 @@ class LoginActivity : AppCompatActivity() {
             mBackWait = System.currentTimeMillis()
             Toast.makeText(this,"한번 더 누르면 종료됩니다", Toast.LENGTH_SHORT).show()
         } else {
+            cleartext()
             finish() //액티비티 종료
         }
     }
 
+    fun cleartext(){
+        binding.apply {
+            idEdit.text.clear()
+            pwEdit.text.clear()
+        }
+    }
 
 
 }

@@ -50,6 +50,7 @@ class RegActivity : AppCompatActivity() {
                     if(result){
                         Toast.makeText(this@RegActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
                         //로그인 화면으로 전환
+                        cleartext()
                         finish()
                     }else{
                         Toast.makeText(this@RegActivity, "회원가입 실패", Toast.LENGTH_SHORT).show()
@@ -62,7 +63,15 @@ class RegActivity : AppCompatActivity() {
 
     }
     override fun onBackPressed() {
+        cleartext()
         finish()
+    }
+
+    fun cleartext(){
+        binding.apply {
+            regId.text.clear()
+            regPw.text.clear()
+        }
     }
 
 }
