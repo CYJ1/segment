@@ -3,6 +3,8 @@ package com.example.segment
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.ActionBar
+import android.os.StrictMode
+import android.os.StrictMode.ThreadPolicy
 
 class UserActivity : AppCompatActivity() {
     //유저의 로그인 상태를 확인할 수 있는 화면
