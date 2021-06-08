@@ -42,11 +42,12 @@ class ServerMain(p : Int) {
                             var inputdata: HashMap<String, String> = HashMap<String, String>()
                             inputdata.put("ClientNumber", output["ClientNumber"].toString())
 
+                            var resultArray : Array<Int> = arrayOf(0)
                             if (output["Command"] == "Create Small Room") { // 작은방 생성 요청이 들어오면 처리
                                 println("Server : Create Small Room Received")
                                 return_value = chatting.createSmallRoom(
                                     output["ClientNumber"].toString().toInt(),
-                                    output["message"].toString(), output["ChattingNumber"].toString().toInt()
+                                    output["message"].toString(), output["QuestionNumber"].toString().toInt(), output["ChattingNumber"].toString().toInt()
                                 )
                             } else if (output["Command"] == "Enter Small Room") {
                                 println("Server : Enter Small Room Received")
@@ -61,11 +62,25 @@ class ServerMain(p : Int) {
                                     output["ChattingNumber"].toString().toInt(),
                                     output["QuestionNumber"].toString().toInt()
                                 )
+                            }else if(output["Command"] == "Check Small Room"){
+                                println("Server : Check Small Room")
+                                resultArray= chatting.getSmallRoomList(output["ClientNumber"].toString().toInt(),output["ChattingNumber"].toString().toInt())
+                                inputdata.put("Result", "Success")
+                                inputdata.put("SmallRoom1", resultArray[0].toString())
+                                inputdata.put("SmallRoom2", resultArray[1].toString())
+                                inputdata.put("SmallRoom3", resultArray[2].toString())
+                            }else if(output["Command"] == "Exit Small Room"){
+                                println("Server : Exit Small Room")
+                                return_value = chatting.exitSmallRoom(
+                                    output["ClientNumber"].toString().toInt(),
+                                    output["ChattingNumber"].toString().toInt(),
+                                    output["QuestionNumber"].toString().toInt()
+                                )
                             }
 
                             if (return_value == true) {
                                 inputdata.put("Result", "Success")
-                            } else {
+                            }else if(return_value == false){
                                 inputdata.put("Result", "Fail")
                             }
                             clientOutput.write(inputdata.toString().toByteArray(Charsets.UTF_8))
