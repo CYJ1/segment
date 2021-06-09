@@ -6,46 +6,44 @@
     android:layout_height="match_parent"
     tools:context=".MainchatlistActivity">
 
-    <Button
-        android:id="@+id/SmallRoomButton1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1번 작은채팅방으로이동"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/SmallRoomButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:text="2번 작은 채팅방으로 이동"
-        app:layout_constraintStart_toStartOf="@+id/_dynamic"
-        app:layout_constraintTop_toBottomOf="@+id/SmallRoomButton1" />
+        <Button
+            android:id="@+id/SmallRoomButton1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:paddingLeft="50dp"
+            android:paddingTop="10dp"
+            android:paddingRight="50dp"
+            android:paddingBottom="10dp"
+            android:text="1번 작은채팅방으로 이동" />
 
-    <Button
-        android:id="@+id/SmallRoomButton3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="3번 작은채팅방으로 이동"
-        app:layout_constraintStart_toEndOf="@+id/SmallRoomButton1"
-        app:layout_constraintTop_toTopOf="parent" />
+        <Button
+            android:id="@+id/SmallRoomButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="50dp"
+            android:paddingTop="10dp"
+            android:paddingRight="50dp"
+            android:paddingBottom="10dp"
+            android:text="2번 작은채팅방으로 이동" />
 
-    <ListView
-        android:id="@+id/_dynamic"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
-        android:divider="@color/black"
-        android:dividerHeight="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <Button
+            android:id="@+id/SmallRoomButton3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="50dp"
+            android:paddingTop="10dp"
+            android:paddingRight="50dp"
+            android:paddingBottom="10dp"
+            android:text="3번 작은채팅방으로 이동" />
 
-    </ListView>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -26,17 +26,27 @@ class MainchatroomActivity : AppCompatActivity() {
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         var ChattingNum = intent.getIntExtra("ChattingNum", -1)
+        var ClientNum = intent.getIntExtra("ClientNum", -1)
         var title_textview = findViewById<TextView>(R.id.mainchatname)
         if(ChattingNum == 1){
             title_textview.text = "C++"
+        }else if(ChattingNum == 2){
+            title_textview.text = "Java"
+        }else if(ChattingNum == 3){
+            title_textview.text = "Python"
+        }else if(ChattingNum == 4){
+            title_textview.text = "Html"
+        }
+        else if(ChattingNum == 5){
+            title_textview.text = "JavaScript"
         }
 
 
         binding.apply {
             makesmallchatbtn.setOnClickListener {
                 intent = Intent(this@MainchatroomActivity,SmallchatlistActivity::class.java)
-                intent.putExtra("ChattingNum", 1); // 일단 1번 채팅방이라고 할게영!!! (지영)
-                intent.putExtra("ClientNum", 1); //일단 1번 회원이라고 할게영!!!(지영)
+                intent.putExtra("ChattingNum", ChattingNum); // 일단 1번 채팅방이라고 할게영!!! (지영)
+                intent.putExtra("ClientNum", ClientNum); //일단 1번 회원이라고 할게영!!!(지영)
                 startActivity(intent)
             }
             closechatbtn.setOnClickListener {

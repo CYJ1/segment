@@ -20,7 +20,15 @@ class ServerMain(p : Int) {
                 val client = serverSocket.accept() // 서버에 접근한 클라이언트와 통신할 수 있는 소켓을 만듭니다.
                 thread(start = true) {
                     var chatting = ServerChat()
+
+                    var user = ServerUser("nickname", "password", 1, client)
+                    var status = ServerStatus(1,"nickname","password",client)
+
                     chatting.init()
+
+                    user.init()
+                    status.init()
+
                     val clientInput = client.inputStream // 클라이언트와 연결된 inputstream
                     val clientOutput = client.outputStream // 클라이언트와 연결된 outputstream
                     while (true) {
@@ -39,6 +47,8 @@ class ServerMain(p : Int) {
                                 println("Server : ${i} : ${output[i]}")
                             }
                             var return_value: Boolean? = null
+                            var return_clientNum = -1
+
                             var inputdata: HashMap<String, String> = HashMap<String, String>()
                             inputdata.put("ClientNumber", output["ClientNumber"].toString())
 
@@ -58,9 +68,10 @@ class ServerMain(p : Int) {
                                 )
                             } else if (output["Command"] == "Destroy Small Room") {
                                 println("Server : Destroy Small Room Received")
-                                return_value = chatting.destroySmallRoom(
+                                return_clientNum = chatting.destroySmallRoom(
                                     output["ChattingNumber"].toString().toInt(),
-                                    output["QuestionNumber"].toString().toInt()
+                                    output["QuestionNumber"].toString().toInt(),
+                                    output["ClientNumber"].toString().toInt()
                                 )
                             }else if(output["Command"] == "Check Small Room"){
                                 println("Server : Check Small Room")
@@ -78,11 +89,44 @@ class ServerMain(p : Int) {
                                 )
                             }
 
+
+                            else if(output["Command"] == "User Signup"){    //회원가입 들어오면 처리하기
+                                println("Server : User Signup")
+                                return_clientNum = user.signup(
+                                    output["UserID"].toString(),
+                                    output["UserPW"].toString()
+                                )
+                            }else if(output["Command"] == "User Login"){    //로그인 들어오면 처리하고 clientNum 반환하기????
+                                println("Server : User Login")
+                                return_clientNum = status.login(
+                                    output["UserID"].toString(),
+                                    output["UserPW"].toString()
+                                )
+                            }else if(output["Command"] == "User Logout"){    //로그아웃 들어오면 처리하기
+                                println("Server : User Logout")
+                                return_value = status.logout(
+                                    output["ClientNumber"].toString().toInt()
+                                )
+                            }
+
+
+
                             if (return_value == true) {
                                 inputdata.put("Result", "Success")
                             }else if(return_value == false){
                                 inputdata.put("Result", "Fail")
                             }
+
+                            if(return_clientNum != -1){
+                                inputdata.put("ClientNum",return_clientNum.toString())
+                                inputdata.put("nickname",output["UserID"].toString())
+                                inputdata.put("Result", "Success")
+                            }else if (return_clientNum == -1){
+                                inputdata.put("nickname",output["UserID"].toString())
+                                inputdata.put("Result", "Fail")
+                            }
+
+
                             clientOutput.write(inputdata.toString().toByteArray(Charsets.UTF_8))
                         }
                     }
