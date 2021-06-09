@@ -8,7 +8,9 @@ import com.example.segment.databinding.ActivityMainBinding
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
 import android.widget.Toast
+import com.example.segment.client.ClientMain
 import com.example.segment.client.ClientStatus
+import com.example.segment.client.ClientUser
 
 class MainActivity : AppCompatActivity() {
     //로그인 후 이동하는 메인 화면
@@ -38,6 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun init() {
 
+        val Client = ClientMain()
+        val Socket = Client.main()
+
         if(intent.hasExtra("id")){
             id = intent.getStringExtra("id").toString()
         }else{
@@ -62,7 +67,10 @@ class MainActivity : AppCompatActivity() {
             btLogout.setOnClickListener {
                 //로그아웃
                 //user status 변경
-                val result = DB.logout(id)
+//              val result = DB.logout(id)
+                val ClientStatus = ClientStatus("pw", Socket)
+                val result = ClientStatus.logout(1) //ClientID 받아둔거 전달해서 logout해야하는데 ID를 어케 받지 서버에서
+
                 finish()
             }
         }

@@ -7,6 +7,7 @@ import android.os.StrictMode.ThreadPolicy
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import com.example.segment.client.ClientMain
 import com.example.segment.client.ClientStatus
 import com.example.segment.databinding.ActivityLoginBinding
 
@@ -34,6 +35,9 @@ class LoginActivity : AppCompatActivity() {
         DB = Database(this)
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+        val Client = ClientMain()
+        val Socket = Client.main()
+        val ClientStatus = ClientStatus("pw", Socket)   //pw가 뭐징
 
         binding.apply {
 
@@ -44,21 +48,22 @@ class LoginActivity : AppCompatActivity() {
 
                 if(id==""||pw==""){
                     Toast.makeText(this@LoginActivity, "모든 항목을 입력해주세요.", Toast.LENGTH_SHORT).show()
-                }else{
-                    val result = DB.login(id, pw)
+                }else {
 
+//                  val result = DB.login(id, pw)
+                    val result = ClientStatus.login(id,pw)
                     if(result){
                         //로그인 성공 시 유저 로그인 정보 전달, 유저 status 변경
                         Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
-
                         intent.putExtra("id",id)
                         startActivity(intent)
-
                         cleartext()
                     }else{
                         Toast.makeText(this@LoginActivity, "로그인 실패", Toast.LENGTH_SHORT).show()
                     }
+
+
                 }
 
             }
