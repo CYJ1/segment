@@ -25,7 +25,7 @@ class MainchatlistActivity : AppCompatActivity() {
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         binding.apply {
-            button2.setOnClickListener {
+            button1.setOnClickListener {
                 intent = Intent(this@MainchatlistActivity,MainchatroomActivity::class.java)
                 intent.putExtra("ChattingNum", 1); // 일단 1번 채팅방이라고 할게영!!! (지영)
                 startActivity(intent)
