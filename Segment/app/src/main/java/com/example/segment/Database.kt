@@ -54,7 +54,10 @@ class Database(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null,
         val strsql = "select * from $TABLE_NAME where userName = '$id';"
         //id로 먼저 찾고 거기있는 pw값이 받아온 pw와 일치하는지 확인하기
         val db = readableDatabase
+        val wdb = writableDatabase
+        val values = ContentValues()
         val cursor = db.rawQuery(strsql, null)
+        val cursor2 = wdb.rawQuery(strsql, null)
 
         var flag = true
 
@@ -67,11 +70,36 @@ class Database(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, null,
             flag = false
         }else{
             flag = true
+            val flag2 = cursor2.moveToFirst()
+            if(flag2){
+                values.put(USER_STATUS, 1)
+                db.update(TABLE_NAME,values,"$ID=?", arrayOf(id.toString()))
+            }
+
         }
         db.close()
+        wdb.close()
         cursor.close()
 
         return flag
+    }
+
+    fun logout(id:String):Boolean{
+        val strsql = "select * from $TABLE_NAME where userName = '$id';"
+        val db = writableDatabase
+        val cursor = db.rawQuery(strsql, null)
+
+        val flag = cursor.count!=0
+        if(flag){
+            cursor.moveToFirst()
+            val values = ContentValues()
+            values.put(USER_STATUS, 0)
+            db.update(TABLE_NAME,values,"$ID=?", arrayOf(id.toString()))
+        }
+        cursor.close()
+        db.close()
+        return flag
+
     }
 
 }

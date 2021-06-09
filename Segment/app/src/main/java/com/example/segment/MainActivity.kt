@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBar
 import com.example.segment.databinding.ActivityMainBinding
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.widget.Toast
 import com.example.segment.client.ClientStatus
 
 class MainActivity : AppCompatActivity() {
@@ -17,6 +18,10 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var Client: ClientStatus
+    lateinit var DB: Database
+    lateinit var id:String
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
+
+        if(intent.hasExtra("id")){
+            id = intent.getStringExtra("id").toString()
+        }else{
+            Toast.makeText(this, "로그인 오류!!!", Toast.LENGTH_SHORT).show()
+        }
+
+        DB = Database(this)
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         //유저 정보 받아온것
@@ -49,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             btLogout.setOnClickListener {
                 //로그아웃
                 //user status 변경
+                val result = DB.logout(id)
                 finish()
             }
         }
