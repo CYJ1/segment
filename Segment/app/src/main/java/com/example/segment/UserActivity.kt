@@ -16,6 +16,9 @@ class UserActivity : AppCompatActivity() {
         actionBar = supportActionBar
         actionBar?.hide()
     }
+
+    //val ClientNum = intent.getIntExtra("ClientNum",-1)
+
     override fun onBackPressed() {
         finish()
     }

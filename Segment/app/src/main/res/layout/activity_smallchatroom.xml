@@ -68,6 +68,13 @@
                         android:fontFamily="@font/regularnexon"
                         android:text="닫기" />
 
+                    <Button
+                        android:id="@+id/deletesmallroom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="14"
+                        android:text="소채팅방 삭제" />
+
                 </LinearLayout>
 
             </LinearLayout>

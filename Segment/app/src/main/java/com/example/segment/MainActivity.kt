@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         }else{
             Toast.makeText(this, "로그인 오류!!!", Toast.LENGTH_SHORT).show()
         }
+        val ClientNum = intent.getIntExtra("ClientNum",-1)
 
         DB = Database(this)
         val policy = ThreadPolicy.Builder().permitAll().build()
@@ -57,11 +58,13 @@ class MainActivity : AppCompatActivity() {
             btChat.setOnClickListener {
                 //큰채팅방 목록으로
                 intent = Intent(this@MainActivity, MainchatlistActivity::class.java)
+                intent.putExtra("ClientNum", ClientNum)
                 startActivity(intent)
             }
             btUser.setOnClickListener {
                 //유저화면으로
                 intent = Intent(this@MainActivity, UserActivity::class.java)
+                intent.putExtra("ClientNum", ClientNum)
                 startActivity(intent)
             }
             btLogout.setOnClickListener {
@@ -70,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 //              val result = DB.logout(id)
                 val ClientStatus = ClientStatus("pw", Socket)
                 val result = ClientStatus.logout(1) //ClientID 받아둔거 전달해서 logout해야하는데 ID를 어케 받지 서버에서
-
+                intent.putExtra("ClientNum", ClientNum)
                 finish()
             }
         }

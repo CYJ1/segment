@@ -41,21 +41,27 @@ class ServerStatus( clientNumber : Int,  nickname : String,  password : String, 
             if(resultset!!.next()){
                 //로그인 정보 확인
                 try{
-                    var dbpw = stmt!!.executeQuery("select userPass from UserDB where userName = '$nickname';")
-                    conn!!.commit()
-                    var flag = (dbpw.getString(1) == password)  //받아온 password와 userDB의 userPass가 일치하는지 확인한다
-                    if(flag){   //아이디 패스워드 일치할 시 user status 1(접속)으로 변경
-                        try{
-                            stmt!!.execute("update UserDB set userStatus = 1 where userName = '$nickname';")
-                            clientNum = (stmt!!.executeQuery("select clientNum from UserDB where userName = '$nickname';")).getInt(1)
-                            conn!!.commit()
-                        }catch (ex:SQLException){
-                            println("로그인 실패")
-                            ex.printStackTrace()
+                    var dbpw = stmt!!.executeQuery("select userPass from UserDB where userName = \"$nickname\";")
+                    if(dbpw!!.next()) {
+                        var flag = (dbpw.getString(1) == password)  //받아온 password와 userDB의 userPass가 일치하는지 확인한다
+                        if (flag) {   //아이디 패스워드 일치할 시 user status 1(접속)으로 변경
+                            try {
+                                stmt!!.execute("update UserDB set userStatus = 1 where userName = \"$nickname\";")
+                                conn!!.commit()
+
+                                var dbcn = stmt!!.executeQuery("select clientNum from UserDB where userName = \"$nickname\";")
+                                if(dbcn!!.next()) {
+                                    clientNum =dbcn.getInt(1)
+                                }
+
+                            } catch (ex: SQLException) {
+                                println("로그인 실패")
+                                ex.printStackTrace()
+                            }
+                        } else {
+                            //아이디 패스워드 불일치
+                            println("아이디와 패스워드가 일치하지 않습니다.")
                         }
-                    }else{
-                        //아이디 패스워드 불일치
-                        println("아이디와 패스워드가 일치하지 않습니다.")
                     }
                 }catch(ex:SQLException){
                     // handle any errors
@@ -89,7 +95,7 @@ class ServerStatus( clientNumber : Int,  nickname : String,  password : String, 
             resultset = stmt!!.executeQuery("select * from UserDB;")
             if(resultset!!.next()){
                 try{
-                    stmt!!.execute("update UserDB set userStatus = 0 where clientNum = '$clientNumber';")   //status 0(접속X)로 변경
+                    stmt!!.execute("update UserDB set userStatus = 0 where clientNum = $clientNumber;")   //status 0(접속X)로 변경
                     conn!!.commit()
                 }catch (ex:SQLException){
                     println("로그아웃 실패")

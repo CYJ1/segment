@@ -30,7 +30,7 @@ class ServerUser( nickname : String,  password : String,  clientNumber : Int,  s
         }
     }
 
-    fun signup(nickname: String, password: String): Boolean {
+    fun signup(nickname: String, password: String): Int {
         //클라이언트에서 이름과 암호 받으면 DB에 유저 정보 저장하기
         var stmt : Statement? = null
         var resultset : ResultSet? = null
@@ -39,19 +39,25 @@ class ServerUser( nickname : String,  password : String,  clientNumber : Int,  s
             resultset = stmt!!.executeQuery("select * from UserDB;")
             if(resultset!!.next()){
                 try{
-                    stmt!!.execute("insert into UserDB (userName, userPass, clientNum, userStatus) values ($nickname, $password, 0 , 0);")
+                    stmt!!.execute("insert into UserDB (userName, userPass, userStatus) values (\"$nickname\", $password, 1);")
                     conn!!.commit()
                 }catch (ex:SQLException){
                     println("회원가입 실패")
                     ex.printStackTrace()
                 }
             }
-            return true
+
+            resultset = stmt!!.executeQuery("select clientNum from UserDB where userName = \"$nickname\"")
+            var clientNum = -1
+            if(resultset!!.next()){
+                clientNum = resultset.getInt(1)
+            }
+            return clientNum
         }catch (ex: SQLException) {
             // handle any errors
             ex.printStackTrace()
             println("User Signup Fail")
-            return false
+            return -1
         }
     }
 }

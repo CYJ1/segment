@@ -164,6 +164,7 @@ class ClientChatting(clientNumber : Int, chattingNumber : Int, socket: java.net.
         inputdata.put("Command", "Destroy Small Room")
         inputdata.put("ChattingNumber", chattingNumber.toString())
         inputdata.put("QuestionNumber", questionNumber.toString())
+        inputdata.put("ClientNumber", clientNumber.toString())
         outputStream.write(inputdata.toString().toByteArray(Charsets.UTF_8))
 
         while(true) {

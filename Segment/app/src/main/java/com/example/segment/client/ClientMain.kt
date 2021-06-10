@@ -29,7 +29,8 @@ class ClientMain(){
 
     fun main() : Socket{
         val port = 3000
-        val socketAddress = InetAddress.getByName("192.168.0.11")
+        val socketAddress = InetAddress.getByName("172.30.1.37") // => 지영
+        //val socketAddress = InetAddress.getByName("192.168.0.11") //=> 다현
         val socket = Socket(socketAddress, port)
 
         //var clientChat = ClientChatting(1,1,11,socket)
