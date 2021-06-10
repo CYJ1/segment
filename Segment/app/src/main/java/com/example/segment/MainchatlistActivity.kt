@@ -22,12 +22,39 @@ class MainchatlistActivity : AppCompatActivity() {
     }
 
     private fun init() {
+        val ClientNum = intent.getIntExtra("ClientNum",-1)
+
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         binding.apply {
             button1.setOnClickListener {
                 intent = Intent(this@MainchatlistActivity,MainchatroomActivity::class.java)
-                intent.putExtra("ChattingNum", 1); // 일단 1번 채팅방이라고 할게영!!! (지영)
+                intent.putExtra("ChattingNum", 1);
+                intent.putExtra("ClientNum",ClientNum)
+                startActivity(intent)
+            }
+            button2.setOnClickListener {
+                intent = Intent(this@MainchatlistActivity,MainchatroomActivity::class.java)
+                intent.putExtra("ChattingNum", 2);
+                intent.putExtra("ClientNum",ClientNum)
+                startActivity(intent)
+            }
+            button3.setOnClickListener {
+                intent = Intent(this@MainchatlistActivity,MainchatroomActivity::class.java)
+                intent.putExtra("ChattingNum", 3);
+                intent.putExtra("ClientNum",ClientNum)
+                startActivity(intent)
+            }
+            button4.setOnClickListener {
+                intent = Intent(this@MainchatlistActivity,MainchatroomActivity::class.java)
+                intent.putExtra("ChattingNum", 4);
+                intent.putExtra("ClientNum",ClientNum)
+                startActivity(intent)
+            }
+            button5.setOnClickListener {
+                intent = Intent(this@MainchatlistActivity,MainchatroomActivity::class.java)
+                intent.putExtra("ChattingNum", 5);
+                intent.putExtra("ClientNum",ClientNum)
                 startActivity(intent)
             }
         }

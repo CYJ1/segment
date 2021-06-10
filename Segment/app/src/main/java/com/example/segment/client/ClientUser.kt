@@ -11,7 +11,7 @@ class ClientUser(val nickname:String, val password : String, val socket: java.ne
     var outputStream = socket.getOutputStream()
     var inputStream = socket.getInputStream()
 
-    fun signup(nickname: String, password: String) : Boolean{
+    fun signup(nickname: String, password: String) : Int{
         var inputdata : HashMap<String, String> = HashMap<String, String>()
         inputdata.put("Command", "User Signup")
         inputdata.put("UserID", nickname.toString())
@@ -32,16 +32,16 @@ class ClientUser(val nickname:String, val password : String, val socket: java.ne
                 if(output["nickname"].toString() == nickname){
                     if(output["Result"].toString() == "Success"){
                         println("Client : User Signup Success")
-                        return true
+                        return output["ClientNum"].toString().toInt()
                     }else{
                         println("Client : User Signup Fail")
-                        return false
+                        return -1
                     }
                     break
                 }
             }
         }
 
-        return true;
+        return -1;
     }
 }

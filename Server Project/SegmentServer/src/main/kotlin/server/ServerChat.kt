@@ -196,29 +196,40 @@ class ServerChat(){
         return true
     }
 
-    fun destroySmallRoom( chattingNumber : Int,  questionNumber : Int) : Boolean{ // 개발완료
+    fun destroySmallRoom( chattingNumber : Int,  questionNumber : Int, clientNumber: Int) : Int{ // 개발완료
         var stmt : Statement? = null
         var resultset : ResultSet? = null
 
         try{
             stmt = conn!!.createStatement()
             resultset = stmt!!.executeQuery("select * from clients where chattingNum = $chattingNumber;")
-            if(resultset!!.next()){
-                stmt!!.execute("delete from RoomDB where chattingNum = $questionNumber;")
-                var room = questionNumber%10
-                stmt!!.execute("update RoomDB set small"+ room.toString() + "Num = NULL where chattingNum = $chattingNumber;")
-                conn!!.commit()
+            if(resultset!!.next()) {
+                resultset = stmt!!.executeQuery("select * from clients where chattingNum = $questionNumber;")
+                var r = resultset.row
+                var row = 0;
+                while(resultset!!.next()){
+                    row+=1
+                }
+                if (row> 1) {
+                    return -1
+                }else {
+                    stmt!!.execute("delete from RoomDB where chattingNum = $questionNumber;")
+                    var room = questionNumber % 10
+                    stmt!!.execute("update RoomDB set small" + room.toString() + "Num = NULL where chattingNum = $chattingNumber;")
+                    conn!!.commit()
+                }
+
             }else{
                 println("해당 소회의실은 이미 존재하지 않습니다")
-                return false;
+                return -1;
             }
         }catch (ex: SQLException) {
             // handle any errors
             ex.printStackTrace()
             println("Destroy Small Room Fail")
-            return false;
+            return -1;
         }
-        return true
+        return clientNumber
     }
 
     fun scatterMessage( chattingNumber : Int) : Boolean{

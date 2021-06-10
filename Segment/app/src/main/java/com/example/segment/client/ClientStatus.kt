@@ -10,7 +10,7 @@ class ClientStatus(password : String, socket: java.net.Socket){
     var outputStream = socket.getOutputStream()
     var inputStream = socket.getInputStream()
 
-    fun login(nickname : String, password : String) : Boolean{
+    fun login(nickname : String, password : String) : Int{
         var inputdata : HashMap<String, String> = HashMap<String, String>()
         inputdata.put("Command", "User Login")
         inputdata.put("UserID", nickname.toString())
@@ -31,17 +31,17 @@ class ClientStatus(password : String, socket: java.net.Socket){
                 if(output["nickname"].toString() == nickname){
                     if(output["Result"].toString() == "Success"){
                         println("Client : User Login Success")
-                        return true
+                        return output["ClientNum"].toString().toInt()
                     }else{
                         println("Client : User Login Fail")
-                        return false
+                        return -1
                     }
                     break
                 }
             }
         }
 
-        return true;
+        return -1;
     }
 
     fun logout(clientNumber: Int) : Boolean{

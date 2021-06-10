@@ -52,11 +52,12 @@ class LoginActivity : AppCompatActivity() {
 
 //                  val result = DB.login(id, pw)
                     val result = ClientStatus.login(id,pw)
-                    if(result){
+                    if(result != -1){
                         //로그인 성공 시 유저 로그인 정보 전달, 유저 status 변경
                         Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         intent.putExtra("id",id)
+                        intent.putExtra("ClientNum", result)
                         startActivity(intent)
                         cleartext()
                     }else{

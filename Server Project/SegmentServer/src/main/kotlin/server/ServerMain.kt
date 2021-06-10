@@ -68,9 +68,10 @@ class ServerMain(p : Int) {
                                 )
                             } else if (output["Command"] == "Destroy Small Room") {
                                 println("Server : Destroy Small Room Received")
-                                return_value = chatting.destroySmallRoom(
+                                return_clientNum = chatting.destroySmallRoom(
                                     output["ChattingNumber"].toString().toInt(),
-                                    output["QuestionNumber"].toString().toInt()
+                                    output["QuestionNumber"].toString().toInt(),
+                                    output["ClientNumber"].toString().toInt()
                                 )
                             }else if(output["Command"] == "Check Small Room"){
                                 println("Server : Check Small Room")
@@ -91,15 +92,15 @@ class ServerMain(p : Int) {
 
                             else if(output["Command"] == "User Signup"){    //회원가입 들어오면 처리하기
                                 println("Server : User Signup")
-                                return_value = user.signup(
-                                    output["nickname"].toString(),
-                                    output["password"].toString()
+                                return_clientNum = user.signup(
+                                    output["UserID"].toString(),
+                                    output["UserPW"].toString()
                                 )
                             }else if(output["Command"] == "User Login"){    //로그인 들어오면 처리하고 clientNum 반환하기????
                                 println("Server : User Login")
                                 return_clientNum = status.login(
-                                    output["nickname"].toString(),
-                                    output["password"].toString()
+                                    output["UserID"].toString(),
+                                    output["UserPW"].toString()
                                 )
                             }else if(output["Command"] == "User Logout"){    //로그아웃 들어오면 처리하기
                                 println("Server : User Logout")
@@ -118,8 +119,13 @@ class ServerMain(p : Int) {
 
                             if(return_clientNum != -1){
                                 inputdata.put("ClientNum",return_clientNum.toString())
+                                inputdata.put("nickname",output["UserID"].toString())
+                                inputdata.put("Result", "Success")
+                            }else if (return_clientNum == -1){
+                                inputdata.put("nickname",output["UserID"].toString())
+                                inputdata.put("Result", "Fail")
                             }
-                                //???
+
 
                             clientOutput.write(inputdata.toString().toByteArray(Charsets.UTF_8))
                         }

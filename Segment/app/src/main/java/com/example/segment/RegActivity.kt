@@ -55,8 +55,9 @@ class RegActivity : AppCompatActivity() {
                     val result = DB.signup(user)
                     */
                     val result = ClientUser.signup(id, pw)
-                    if(result){
+                    if(result != -1){
                         Toast.makeText(this@RegActivity, "회원가입 성공", Toast.LENGTH_SHORT).show()
+                        intent.putExtra("ClientNum", result)
                         //로그인 화면으로 전환
                         cleartext()
                         finish()
