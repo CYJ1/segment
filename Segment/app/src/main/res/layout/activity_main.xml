@@ -4,15 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".LoginActivity">
 
-    <TextView
+    <Button
+        android:id="@+id/bt_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="211dp"
+        android:fontFamily="@font/regularnexon"
+        android:text="Go Chatroom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/bt_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/regularnexon"
+        android:text="User Status"
+        app:layout_constraintEnd_toEndOf="@+id/bt_chat"
+        app:layout_constraintStart_toStartOf="@+id/bt_chat"
+        app:layout_constraintTop_toBottomOf="@+id/bt_chat" />
+
+    <Button
+        android:id="@+id/bt_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:fontFamily="@font/regularnexon"
+        android:text="Logout"
+        app:layout_constraintEnd_toEndOf="@+id/bt_user"
+        app:layout_constraintStart_toStartOf="@+id/bt_user"
+        app:layout_constraintTop_toBottomOf="@+id/bt_user" />
 </androidx.constraintlayout.widget.ConstraintLayout>
