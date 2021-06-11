@@ -35,9 +35,10 @@ class LoginActivity : AppCompatActivity() {
         DB = Database(this)
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+
         val Client = ClientMain()
         val Socket = Client.main()
-        val ClientStatus = ClientStatus("pw", Socket)   //pw가 뭐징
+        val ClientStatus = ClientStatus( Socket)   //pw가 뭐징
 
         binding.apply {
 

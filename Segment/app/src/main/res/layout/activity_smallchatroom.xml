@@ -91,6 +91,7 @@
                 android:text="공지사항 확인하기" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/smallrecycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

@@ -11,6 +11,10 @@ class ServerUser( nickname : String,  password : String,  clientNumber : Int,  s
     val username = "root"
     val password = "hjmaharu"
     var connectionProps = Properties()
+    val limit = 10
+    var now = -1
+
+
 
     fun init() : Unit{
         connectionProps = Properties()
@@ -21,10 +25,13 @@ class ServerUser( nickname : String,  password : String,  clientNumber : Int,  s
             Class.forName("com.mysql.jdbc.Driver").newInstance()
             conn = DriverManager.getConnection(connection_str,connectionProps)
             conn!!.setAutoCommit(false)
+            println("Success to connect with db")
         } catch (ex: SQLException) {
+            println("wrong sql")
             // handle any errors
             ex.printStackTrace()
         } catch (ex: Exception) {
+            println("fail to connect with db")
             // handle any errors
             ex.printStackTrace()
         }

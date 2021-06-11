@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                 //로그아웃
                 //user status 변경
 //              val result = DB.logout(id)
-                val ClientStatus = ClientStatus("pw", Socket)
+                val ClientStatus = ClientStatus( Socket)
                 val result = ClientStatus.logout(ClientNum)
                 if(result){
                     Toast.makeText(this@MainActivity,"로그아웃",Toast.LENGTH_SHORT).show()

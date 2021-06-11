@@ -4,6 +4,8 @@ import java.io.*
 import java.net.*
 import java.sql.*
 import java.util.*
+import javax.swing.plaf.nimbus.State
+import kotlin.collections.HashMap
 
 //clientNumber : Int, chattingNumber : Int,  questionNumber : Int,  socket: java.net.Socket
 
@@ -21,6 +23,8 @@ class ServerChat(){
     val username = "root"
     val password = "hjmaharu"
     var connectionProps = Properties()
+    val limit = 10
+    var now = -1
 
 
 
@@ -33,6 +37,7 @@ class ServerChat(){
             Class.forName("com.mysql.jdbc.Driver").newInstance()
             conn = DriverManager.getConnection(connection_str,connectionProps)
             conn!!.setAutoCommit(false)
+
         } catch (ex: SQLException) {
             // handle any errors
             ex.printStackTrace()
@@ -46,15 +51,82 @@ class ServerChat(){
     }
 
     fun enterBigRoom( clientNumber : Int,  chattingNumber : Int) : Boolean {
+        var stmt : Statement? = null
+        var resultset : ResultSet? = null
+
+        try{
+            stmt = conn!!.createStatement()
+            resultset = stmt!!.executeQuery("select * from clients where chattingNum = $chattingNumber and clientNum = $clientNumber;")
+
+            if(!resultset!!.next()){
+                stmt!!.execute("insert into clients(chattingNum, clientNum) Values($chattingNumber, $clientNumber);")
+                conn!!.commit()
+            }else{
+                println("해당 client는 이미 해당 큰 채팅방에 속해있습니다")
+                return false;
+            }
+        }catch (ex: SQLException) {
+            // handle any errors
+            ex.printStackTrace()
+            println("Enter Big Room Fail")
+            return false;
+        }
         return true
     }
 
     fun exitBigRoom( clientNumber : Int,  chattingNumber : Int) : Boolean{
+        var stmt : Statement? = null
+        var resultset : ResultSet? = null
+
+        try{
+            stmt = conn!!.createStatement()
+            resultset = stmt!!.executeQuery("select * from clients where chattingNum = $chattingNumber and clientNum = $clientNumber;")
+            if(resultset!!.next()){
+                stmt!!.execute("delete from clients where chattingNum = $chattingNumber and clientNum = $clientNumber;")
+                conn!!.commit()
+            }else{
+                println("해당 대회의실에 해당 클라이언트는 이미 존재하지 않습니다")
+                return false;
+            }
+        }catch (ex: SQLException) {
+            // handle any errors
+            ex.printStackTrace()
+            println("Exit Small Room Fail")
+            return false;
+        }
         return true
     }
 
-    fun sendMessage( clientNumber : Int,  chattingNumber : Int,  message :String) : Boolean{
-        return true
+    fun sendMessage( clientNumber : Int,  chattingNumber : Int,  message :String) : Int{
+        var stmt : Statement? = null
+        var resultset : ResultSet? = null
+
+        try {
+            stmt = conn!!.createStatement()
+            //println("insert into message(chattingNum, clientNum, message) values ($chattingNumber, $clientNumber, \"$message\");")
+            stmt!!.execute("insert into message(chattingNum, clientNum, message) values ($chattingNumber, $clientNumber, \"$message\");")
+//            return true
+            conn!!.commit()
+
+            println("success to insert")
+            println("sql : select messageNum from message where chattingNum = $chattingNumber and clientNum = $clientNumber and message = \"$message\" order by messageNum desc limit 1;")
+            resultset = stmt!!.executeQuery("select messageNum from message where chattingNum = $chattingNumber and clientNum = ${clientNumber} and message = \"$message\" order by messageNum desc limit 1;")
+            if(resultset!!.next() ) {
+                val index = resultset.getObject("messageNum").toString().toInt()
+                if(index == null ){
+                    return -1
+                }
+                else {
+                    println("<sendMessage Success> messageNum = $index")
+                    return index
+                }
+            }
+        } catch ( e: Exception) {
+            println("[ERROR] sendMessage")
+            println("e : ${e.message}")
+            return -1
+        }
+        return -1
     }
 
     fun getSmallRoomList(clientNumber: Int, chattingNumber: Int) : Array<Int>{
@@ -64,6 +136,7 @@ class ServerChat(){
 
         try{
             stmt = conn!!.createStatement()
+            //println("select * from RoomDB join clients on RoomDB.chattingNum = clients.chattingNum where RoomDB.chattingNum = "+ chattingNumber.toString() + " and clients.clientNum = "+ clientNumber.toString())
             resultset = stmt!!.executeQuery("select * from RoomDB join clients on RoomDB.chattingNum = clients.chattingNum where RoomDB.chattingNum = "+ chattingNumber.toString() + " and clients.clientNum = "+ clientNumber.toString())
 
             if(resultset!!.next()) {
@@ -169,8 +242,48 @@ class ServerChat(){
         return true
     }
 
-    fun requestOldMessage( clientNumber : Int,  chattingNumber : Int) : Boolean{
-        return true
+    fun requestOldMessage( clientNumber : Int,  chattingNumber : Int) :HashMap<Int, String>{
+        var stmt : Statement ? =null
+        var resultset : ResultSet? = null
+        var result = HashMap<Int, String>()
+
+        try {
+            stmt = conn!!.createStatement()
+
+            if ( now == -1) {
+                //select messageNum from message where chattingNum = 1 order by messageNum desc limit 1;
+                resultset = stmt!!.executeQuery("select messageNum from message where chattingNum = $chattingNumber order by messageNum desc limit 1;")
+                if(resultset!!.next()) {
+                    var size = resultset.getObject("messageNum")
+                    if(size == null ){
+                        now = 0
+                    }
+                    else {
+                        now = size.toString().toInt()
+                    }
+                }
+            }
+
+            //select * from message, UserDB where UserDB.clientNum = message.clientNum and message.messageNum <= $now and message.chattingNum = $chattingNumber order by message.messageNum desc limit $limit;
+            resultset = stmt!!.executeQuery("select * from message, UserDB where UserDB.clientNum = message.clientNum and message.messageNum <= $now and message.chattingNum = $chattingNumber order by message.messageNum desc limit $limit;")
+            var index=0;
+            var str =""
+            while(resultset!!.next()) {
+                var chatTime = resultset.getObject("chatTime").toString()
+                var userName = resultset.getObject("userName").toString()
+                var clientNum = resultset.getObject("clientNum").toString()
+                var message = resultset.getObject("message").toString()
+                var messageNum = resultset.getObject("messageNum").toString()
+                str = "chatTime+$chatTime/userName+$userName/message+$message/clientNum+$clientNum"
+                result.put(messageNum.toInt(), str)
+                now = messageNum.toInt()
+            }
+            now-=1
+//            println("Server : Succes to request old message and now = $now")
+            return result;
+        }catch(e : Exception) {
+            return result
+        }
     }
 
     fun exitSmallRoom(clientNumber: Int, chattingNumber: Int, questionNumber: Int) : Boolean{
@@ -179,7 +292,7 @@ class ServerChat(){
 
         try{
             stmt = conn!!.createStatement()
-            resultset = stmt!!.executeQuery("select * from clients where chattingNum = $chattingNumber and clientNum = $clientNumber;")
+            resultset = stmt!!.executeQuery("select * from clients where chattingNum = $questionNumber and clientNum = $clientNumber;")
             if(resultset!!.next()){
                 stmt!!.execute("delete from clients where chattingNum = $questionNumber and clientNum = $clientNumber;")
                 conn!!.commit()
@@ -232,7 +345,36 @@ class ServerChat(){
         return clientNumber
     }
 
-    fun scatterMessage( chattingNumber : Int) : Boolean{
-        return true
+    fun scatterMessage( msgNum : Int ) : HashMap<Int, String>{
+        var stmt : Statement? = null
+        var resultset : ResultSet? = null
+        var messages : HashMap<Int, String> = HashMap<Int, String>()
+        try {
+            stmt = conn!!.createStatement()
+            //SELECT * FROM "TABLE NAME" ORDER BY "COLUMN NAME" DESC LIMIT 1
+            //println("select * from message order by messageNum where chattingNum = $chattingNumber desc limit 1")
+            // select * from message, UserDB order by messageNum where message.chattingNum=1 and message. desc limit 1
+            //select * from UserDB, clients, message where message.chattingNum = $chattingNumber and clients.chattingNum = $chattingNumber and UserDB.userStatus = 1 order by message.messageNum desc limit 1
+            var sql = "select s1D.chattingNum, s1D.message, s1D.chatTime, s2D.userName, s2D.clientNum from message as s1D join (select uD.clientNum, uD.userName, cD.chattingNum from UserDB as uD join clients as cD on uD.clientNum = cD.clientNum where uD.userStatus = 1) as s2D on s1D.chattingNum = s2D.chattingNum where s1D.messageNum = $msgNum;"
+            //println("Server [ Scatter Message ] sql : $sql")
+            resultset = stmt!!.executeQuery(sql)
+            var index=0;
+
+            while(resultset!!.next()) {
+                println("Server : ScatterMessage dd")
+                var chatTime = resultset.getObject("chatTime").toString()
+                var clientNum = resultset.getObject("clientNum").toString()
+                var message = resultset.getObject("message").toString()
+                var userName = resultset.getObject("userName").toString()
+                var messageNum = msgNum
+                var str = "chatTime+$chatTime/userName+$userName/message+$message/clientNum+$clientNum/messageNum+$messageNum"
+                println("Check : $str")
+                messages[clientNum.toInt()] = str
+                println("Server : scatterMessage success")
+            }
+            return messages
+        } catch ( e : Exception ) {
+            return HashMap<Int, String>()
+        }
     }
 }
