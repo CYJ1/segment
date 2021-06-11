@@ -71,10 +71,15 @@ class MainActivity : AppCompatActivity() {
                 //로그아웃
                 //user status 변경
 //              val result = DB.logout(id)
-                val ClientStatus = ClientStatus("pw", Socket)
-                val result = ClientStatus.logout(1) //ClientID 받아둔거 전달해서 logout해야하는데 ID를 어케 받지 서버에서
-                intent.putExtra("ClientNum", ClientNum)
-                finish()
+                val ClientStatus = ClientStatus( Socket)
+                val result = ClientStatus.logout(ClientNum)
+                if(result){
+                    Toast.makeText(this@MainActivity,"로그아웃",Toast.LENGTH_SHORT).show()
+                    finish()
+                }else{
+                    Toast.makeText(this@MainActivity,"로그아웃 실패",Toast.LENGTH_SHORT).show()
+                }
+                //intent.putExtra("ClientNum", ClientNum)
             }
         }
     }

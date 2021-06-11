@@ -4,12 +4,16 @@ import java.io.*
 import java.net.*
 import java.sql.*
 import java.util.*
-
-class ServerStatus( clientNumber : Int,  nickname : String,  password : String,  socket: java.net.Socket){
+//clientNumber : Int,  nickname : String,  password : String,  socket: java.net.Socket
+class ServerStatus( clientNumber : Int,  nickname : String,  password : String,socket: java.net.Socket){
     var conn : Connection? = null
     val username = "root"
     val password = "hjmaharu"
     var connectionProps = Properties()
+    val limit = 10
+    var now = -1
+
+
 
     fun init() : Unit{
         connectionProps = Properties()
@@ -112,8 +116,41 @@ class ServerStatus( clientNumber : Int,  nickname : String,  password : String, 
         }
     }
 
-    fun checkAllStatus() : Boolean {
-        return true
+    fun checkAllStatus() : Array<String> {
+        var stmt : Statement? = null
+        var resultset : ResultSet? = null
+
+        var result : Array<String> = arrayOf("fail","fail")
+
+        var online = ""
+        var offline = ""
+
+        var username : String
+        var userStatus : Int
+
+        try{
+            stmt = conn!!.createStatement()
+            resultset = stmt!!.executeQuery("select userName, userStatus from userDB;")
+
+            while(resultset!!.next()){
+                userStatus = resultset.getObject("userStatus").toString().toInt()
+                username = resultset.getObject("userName").toString()
+
+                if(userStatus == 1){
+                    online += username + ","
+                }else{
+                    offline += username + ","
+                }
+            }
+
+            result = arrayOf(online, offline)
+        }catch (ex: SQLException) {
+            // handle any errors
+            ex.printStackTrace()
+            println("Enter Big Room Fail")
+            return result
+        }
+        return result
     }
 
     fun scatterMessage() : Boolean {

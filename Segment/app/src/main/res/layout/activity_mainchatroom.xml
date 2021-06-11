@@ -81,6 +81,7 @@
                 android:text="소채팅방 개설하기" />
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/chattingView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
