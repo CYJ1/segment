@@ -20,8 +20,8 @@ import kotlin.collections.HashMap
 
 class ServerChat(){
     var conn : Connection? = null
-    val username = "root"
-    val password = "hjmaharu"
+    val username = "#####"
+    val password = "########"
     var connectionProps = Properties()
     val limit = 10
     var now = -1
